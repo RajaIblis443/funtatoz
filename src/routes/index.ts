@@ -32,6 +32,14 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Riwayat Transaksi'
     }
+  },
+  {
+    path: '/finance',
+    name: 'finance',
+    component: () => import('../views/FinanceView.vue'),
+    meta: {
+      title: 'Kelola Keuangan'
+    }
   }
 ];
 
