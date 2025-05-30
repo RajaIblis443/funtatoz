@@ -174,7 +174,7 @@ const totalItems = computed(() => transaksiStore.totalItems);
           <td>{{ transaksi.jumlah }}</td>
           <td class="actions">
             <button @click="openEditModal(transaksi)" class="edit-button">Edit</button>
-            <button @click="deleteTransaction(transaksi.id)" class="delete-button">Delete</button>
+            <button @click="deleteTransaction(transaksi.id!)" class="delete-button">Delete</button>
           </td>
         </tr>
         <tr v-if="filteredTransaksiList.length === 0">

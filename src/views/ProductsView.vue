@@ -250,7 +250,7 @@ const filteredProducts = computed(() => {
   return produkStore.data.filter(
     product => 
       product.nama_barang.toLowerCase().includes(query) || 
-      product.id.toString().includes(query) ||
+      product.id!.toString().includes(query) ||
       product.harga.toString().includes(query)
   );
 });
@@ -311,7 +311,7 @@ const deleteProduct = async (): Promise<void> => {
   if (!productToDelete.value) return;
   
   try {
-    await produkStore.deleteProduk(productToDelete.value.id.toString());
+    await produkStore.deleteProduk(productToDelete.value.id!);
     showDeleteModal.value = false;
     productToDelete.value = null;
   } catch (error) {

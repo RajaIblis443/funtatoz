@@ -2,22 +2,25 @@ import axios, { type AxiosInstance } from "axios";
 import type { Transaksi } from "../types/transaksi.type";
 import { generateUUID } from "../utils/uuid";
 
-const _BASE_URL = 'https://cors2.funtatoz.workers.dev?target=https://script.google.com/macros/s/AKfycbzMbD_o9ZYDGhm7L2y-cy30r78IoIWtChcaJB45_L3Si57emuemwDVHr386G35PRje56w/exec';
+const _BASE_URL = `https://lxfdqogabjuhpltkjmww.supabase.co/rest/v1/transaksi`;
 
 export default class TransaksiService {
   private api: AxiosInstance;
   constructor() {
     this.api = axios.create({
       baseURL: _BASE_URL,
+      headers: {
+        'apiKey': import.meta.env.VITE_APP_SUPABASE_API_KEY || '',
+        'Authorization': `Bearer ${import.meta.env.VITE_APP_SUPABASE_API_KEY || ''}`,
+        'Content-Type': 'application/json',
+      }
     });
   }
 
   async getTransaksi() { 
     try {
       console.log('Fetching transaksi data...');
-      const response = await this.api.get('', {
-        params: { sheet: 'transaksi' }
-      });
+      const response = await this.api.get('');
       
       // Log entire response for debugging
       console.log('API Response:', response);
@@ -51,10 +54,13 @@ export default class TransaksiService {
   }
   async addTransaksi(transaksi: Transaksi) {
     try {
-      transaksi.id = generateUUID();
-      const response = await this.api.post('', transaksi, {
-        params: { sheet: 'transaksi', _method: 'POST' }
-      });
+      const modifiedTransaksi: Transaksi = {
+        tanggal: transaksi.tanggal,
+        kode_barang: transaksi.kode_barang,
+        jumlah: transaksi.jumlah,
+      }
+      console.log('Data yang dikirim ke Supabase:', modifiedTransaksi);
+      const response = await this.api.post('', modifiedTransaksi);
       return response.data;
     }
     catch (error) {
@@ -65,7 +71,7 @@ export default class TransaksiService {
   async updateTransaksi(transaksi: Transaksi) { 
     try {
       const response = await this.api.post('', transaksi, {
-        params: { sheet: 'transaksi', _method: 'PUT' }
+        params: { id: `eq.${transaksi.id}`}
       });
       return response.data;
     } catch (error) {
@@ -73,11 +79,9 @@ export default class TransaksiService {
       throw error;
     }
   }
-  async deleteTransaksi(id: string) { 
+  async deleteTransaksi(id: number) { 
     try {
-      const response = await this.api.post('', { id }, {
-        params: { sheet: 'transaksi', _method: 'DELETE' }
-      });
+      const response = await this.api.delete('', { params: { id: `eq.${id}` } });
       return response.data;
     } catch (error) {
       console.error("Error deleting transaction:", error);

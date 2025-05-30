@@ -2,14 +2,18 @@ import axios, { type AxiosInstance } from "axios";
 import { generateUUID } from "../utils/uuid";
 import type Keuangan from "../types/keuangan.type";
 
-const _BASE_URL = 'https://cors2.funtatoz.workers.dev?target=https://script.google.com/macros/s/AKfycbzMbD_o9ZYDGhm7L2y-cy30r78IoIWtChcaJB45_L3Si57emuemwDVHr386G35PRje56w/exec';
+const _BASE_URL = 'https://lxfdqogabjuhpltkjmww.supabase.co/rest/v1/keuangan';
 
 export default class KeuanganService {
   private api: AxiosInstance;
   constructor() {
     this.api = axios.create({
       baseURL: _BASE_URL,
-      // Increase timeout to 30 seconds (default is 0, which means no timeout)
+      headers: {
+        'apiKey': import.meta.env.VITE_APP_SUPABASE_API_KEY || '',
+        'Authorization': `Bearer ${import.meta.env.VITE_APP_SUPABASE_API_KEY || ''}`,
+        'Content-Type': 'application/json',
+      },
       timeout: 30000,
     });
   }
@@ -17,9 +21,7 @@ export default class KeuanganService {
   async getKeuangan() { 
     try {
       console.log('Fetching keuangan data...');
-      const response = await this.api.get('', {
-        params: { sheet: 'keuangan' }
-      });
+      const response = await this.api.get('');
       
       // Log entire response for debugging
       console.log('API Response:', response);
@@ -54,14 +56,16 @@ export default class KeuanganService {
 
   async addTransaksi(keuangan: Keuangan) {
     try {
-      keuangan.id = generateUUID();
-      const response = await this.api.post('', keuangan, {
-        params: { sheet: 'keuangan', _method: 'POST' }
-      });
+      const modifiedKeuangan: Keuangan = {
+        tanggal: keuangan.tanggal,
+        tipe: keuangan.tipe,
+        nominal: keuangan.nominal,
+        keterangan: keuangan.keterangan,
+      }
+      const response = await this.api.post('', keuangan);
       return response.data;
     }
     catch (error) {
-      // Enhanced error logging
       if (axios.isAxiosError(error)) {
         console.error("Error adding transaction:", {
           message: error.message,
@@ -78,8 +82,14 @@ export default class KeuanganService {
 
   async updateTransaksi(keuangan: Keuangan) { 
     try {
+      const modifiedKeuangan: Keuangan = {
+        tipe: keuangan.tipe,
+        nominal: keuangan.nominal,
+        keterangan: keuangan.keterangan,
+        tanggal: keuangan.tanggal,
+      }
       const response = await this.api.post('', keuangan, {
-        params: { sheet: 'keuangan', _method: 'PUT' }
+        params: { id: `eq.${keuangan.id}` }
       });
       return response.data;
     } catch (error) {
@@ -98,10 +108,10 @@ export default class KeuanganService {
     }
   }
   
-  async deleteTransaksi(id: string) { 
+  async deleteTransaksi(id: number) { 
     try {
       const response = await this.api.post('', { id }, {
-        params: { sheet: 'keuangan', _method: 'DELETE' }
+        params: { id: `eq.${id}` },
       });
       return response.data;
     } catch (error) {

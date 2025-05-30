@@ -307,7 +307,7 @@ const filteredProducts = computed(() => {
   const query = searchQuery.value.toLowerCase();
   return produkStore.data.filter(
     product => product.nama_barang.toLowerCase().includes(query) || 
-    product.id.toString().includes(query)
+    product.id!.toString().includes(query)
   );
 });
 

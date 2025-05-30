@@ -122,7 +122,7 @@
     </div>
 
     <!-- Transactions Table -->
-    <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="bg-white rounded-lg shadow overflow-x-auto">
       <div v-if="keuanganStore.loading" class="p-8 text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent mx-auto"></div>
         <p class="mt-2 text-gray-600">Memuat data...</p>
@@ -483,7 +483,7 @@ const deleteTransaction = async () => {
   
   try {
     isDeleting.value = true;
-    await keuanganStore.deleteTransaksi(transactionToDelete.value.id.toString());
+    await keuanganStore.deleteTransaksi(transactionToDelete.value.id! .toString());
     cancelDeleteTransaction();
   } catch (error) {
     console.error('Error deleting transaction:', error);

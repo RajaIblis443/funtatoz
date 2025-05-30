@@ -26,7 +26,7 @@ export const useProdukStore = defineStore('produk', {
       return state.data.filter((produk) => {
         return (
           produk.nama_barang.toLowerCase().includes(keyword) || 
-          produk.id.toString().includes(keyword) ||
+          produk.id!.toString().includes(keyword) ||
           produk.harga.toString().includes(keyword)
         );
       });
@@ -65,7 +65,7 @@ export const useProdukStore = defineStore('produk', {
       loadingStore.startLoading('Menambahkan produk baru...');
       
       try {
-        const response = await produkService.addTransaksi(produk);
+        const response = await produkService.addProduk(produk);
         await this.fetchProduk(); 
         toastStore.success('Produk berhasil ditambahkan');
         return response;
@@ -87,7 +87,7 @@ export const useProdukStore = defineStore('produk', {
       loadingStore.startLoading('Memperbarui produk...');
       
       try {
-        const response = await produkService.updateTransaksi(produk);
+        const response = await produkService.updateProduk(produk);
         await this.fetchProduk();
         toastStore.success('Produk berhasil diperbarui');
         return response;
@@ -101,7 +101,7 @@ export const useProdukStore = defineStore('produk', {
       }
     },
 
-    async deleteProduk(id: string) {
+    async deleteProduk(id: number) {
       const loadingStore = useLoadingStore();
       const toastStore = useToastStore();
       
@@ -109,7 +109,7 @@ export const useProdukStore = defineStore('produk', {
       loadingStore.startLoading('Menghapus produk...');
       
       try {
-        const response = await produkService.deleteTransaksi(id);
+        const response = await produkService.deleteProduk(id);
         await this.fetchProduk(); // Refresh the data
         toastStore.success('Produk berhasil dihapus');
         return response;

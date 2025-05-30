@@ -3,22 +3,25 @@ import { generateUUID } from "../utils/uuid";
 import type { Produk } from "../types/produk.type";
 
 
-const _BASE_URL = 'https://cors2.funtatoz.workers.dev?target=https://script.google.com/macros/s/AKfycbzMbD_o9ZYDGhm7L2y-cy30r78IoIWtChcaJB45_L3Si57emuemwDVHr386G35PRje56w/exec';
+const _BASE_URL = `https://lxfdqogabjuhpltkjmww.supabase.co/rest/v1/produk`;
 
 export default class ProdukService {
   private api: AxiosInstance;
   constructor() {
     this.api = axios.create({
       baseURL: _BASE_URL,
+      headers: {
+        'apiKey': import.meta.env.VITE_APP_SUPABASE_API_KEY || '',
+        'Authorization': `${import.meta.env.VITE_APP_SUPABASE_API_KEY || ''}`,
+        'Content-Type': 'application/json',
+      }
     });
   }
 
   async getProduk() { 
     try {
       console.log('Fetching produk data...');
-      const response = await this.api.get('', {
-        params: { sheet: 'produk' }
-      });
+      const response = await this.api.get('');
       
       // Log entire response for debugging
       console.log('API Response:', response);
@@ -51,23 +54,32 @@ export default class ProdukService {
     }
   }
 
-  async addTransaksi(produk: Produk) {
+  async addProduk(produk: Produk) {
     try {
-      produk.id = generateUUID();
-      const response = await this.api.post('', produk ,{
-        params: { sheet: 'produk', _method: 'POST' }
-      });
+      const modifedProduk = { 'nama_barang' : produk.nama_barang, 'harga': produk.harga };
+      console.log('Data yang dikirim ke Supabase:', modifedProduk);
+      const response = await this.api.post('', modifedProduk);
       return response.data;
     }
     catch (error) {
-      console.error("Error adding transaction:", error);
+      if (axios.isAxiosError(error)) {
+        console.error("Error adding transaction:", {
+          message: error.message,
+          code: error.code,
+          status: error.response?.status,
+          data: error.response?.data // <-- ini biasanya ada pesan error detail dari Supabase
+        });
+      } else {
+        console.error("Error adding transaction:", error);
+      }
       throw error;
     }
   }
-  async updateTransaksi(produk: Produk) { 
+  async updateProduk(produk: Produk) { 
     try {
-      const response = await this.api.post('', produk, {
-        params: { sheet: 'produk', _method: 'PUT' }
+      const modifedProduk = { 'nama_barang' : produk.nama_barang, 'harga': produk.harga };
+      const response = await this.api.patch('', modifedProduk, {
+        params: { id: `eq.${produk.id}` }
       });
       return response.data;
     } catch (error) {
@@ -75,10 +87,10 @@ export default class ProdukService {
       throw error;
     }
   }
-  async deleteTransaksi(id: string) { 
+  async deleteProduk(id: number) { 
     try {
-      const response = await this.api.post('', { id }, {
-        params: { sheet: 'transaksi', _method: 'DELETE' }
+      const response = await this.api.delete('', {
+        params: { id: `eq.${id}` }
       });
       return response.data;
     } catch (error) {
