@@ -606,7 +606,7 @@ export const useKeuanganStore = defineStore('keuangan', {
       this.loading = true;
       this.error = null;
       try {
-        const response = await keuanganService.deleteTransaksi(id);
+        const response = await keuanganService.deleteTransaksi(Number(id));
         await this.fetchKeuangan(); // Refresh the data
         return response;
       } catch (error) {

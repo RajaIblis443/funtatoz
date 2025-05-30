@@ -40,7 +40,7 @@ const applyFilters = (data: Transaksi[], filters: {
     if (filters.filterKeyword && filters.filterKeyword.trim() !== '') {
       const keyword = filters.filterKeyword.toLowerCase();
       const matchesKeyword = 
-        transaksi.id.toString().includes(keyword) || 
+        transaksi.id!.toString().includes(keyword) || 
         transaksi.kode_barang.toString().includes(keyword) ||
         false;
         
@@ -336,7 +336,7 @@ export const useTransaksiStore = defineStore('transaksi', {
       this.loading = true;
       this.error = null;
       try {
-        const response = await transaksiService.deleteTransaksi(id);
+        const response = await transaksiService.deleteTransaksi(Number(id));
         await this.fetchTransaksi(); // Refresh data after deleting
         return response;
       } catch (error) {
