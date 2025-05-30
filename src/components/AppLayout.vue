@@ -28,7 +28,7 @@
             <img src="../assets/logo final.png" alt="Logo">
           </img>
           </div>
-          <h1 class="text-2xl font-bold text-black">FUNTATOZ</h1>
+          <h1 class="text-2xl font-bold text-black">FUNTATO</h1>
         </div>
 
         <!-- Navigation Menu -->
