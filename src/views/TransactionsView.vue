@@ -182,7 +182,7 @@
                   Detail
                 </button>
                 <button 
-                  @click="deleteTransaction(transaction.id)" 
+                  @click="deleteTransaction(transaction.id!)" 
                   class="text-red-600 hover:text-red-900"
                 >
                   Hapus
