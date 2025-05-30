@@ -339,17 +339,16 @@ const formatDate = (date: Date): string => {
   }).format(date);
 };
 
-const addToCart = (product: { id: number; nama_barang: string; harga: number }) => {
-  // Cari apakah sudah ada di keranjang
+const addToCart = (product: { id?: number; nama_barang: string; harga: number }) => {
+
   const existingIndex = cart.value.findIndex(item => item.id === product.id);
   
   if (existingIndex >= 0) {
     // Increment jumlah jika sudah ada
     cart.value[existingIndex].quantity++;
   } else {
-    // Tambahkan ke keranjang jika belum ada
     cart.value.push({
-      id: product.id,
+      id: product.id!,
       name: product.nama_barang,
       price: product.harga,
       quantity: 1
