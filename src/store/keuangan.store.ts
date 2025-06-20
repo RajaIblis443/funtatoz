@@ -590,6 +590,7 @@ export const useKeuanganStore = defineStore('keuangan', {
     async updateTransaksi(transaksi: Keuangan) {
       this.loading = true;
       this.error = null;
+    
       try {
         const response = await keuanganService.updateTransaksi(transaksi);
         await this.fetchKeuangan(); // Refresh the data

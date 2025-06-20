@@ -18,24 +18,7 @@ provide('toast', {
 </script>
 
 <template>
-  <AppLayout>
-    <!-- Pastikan transition antar halaman bekerja dengan benar -->
-    <router-view v-slot="{ Component }">
-      <transition
-        name="page"
-        mode="out-in"
-        enter-active-class="transition-opacity duration-300 ease-out"
-        leave-active-class="transition-opacity duration-200 ease-in"
-        enter-from-class="opacity-0"
-        enter-to-class="opacity-100"
-        leave-from-class="opacity-100"
-        leave-to-class="opacity-0"
-      >
-        <component :is="Component" :key="$route.fullPath" />
-      </transition>
-    </router-view>
-  </AppLayout>
-  
+  <router-view />
   <LoadingOverlay :show="loadingStore.isLoading" :message="loadingStore.message" />
   <ToastNotification ref="toast" />
 </template>

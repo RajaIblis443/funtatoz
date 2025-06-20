@@ -62,7 +62,7 @@ export default class KeuanganService {
         nominal: keuangan.nominal,
         keterangan: keuangan.keterangan,
       }
-      const response = await this.api.post('', keuangan);
+      const response = await this.api.post('', modifiedKeuangan);
       return response.data;
     }
     catch (error) {
@@ -88,7 +88,7 @@ export default class KeuanganService {
         keterangan: keuangan.keterangan,
         tanggal: keuangan.tanggal,
       }
-      const response = await this.api.post('', keuangan, {
+      const response = await this.api.patch('', modifiedKeuangan, {
         params: { id: `eq.${keuangan.id}` }
       });
       return response.data;
@@ -110,12 +110,12 @@ export default class KeuanganService {
   
   async deleteTransaksi(id: number) { 
     try {
-      const response = await this.api.post('', { id }, {
-        params: { id: `eq.${id}` },
-      });
+      const response = await this.api.delete('', { params: {
+        id: `eq.${id}`
+      } });
       return response.data;
     } catch (error) {
-      // Enhanced error logging
+      // Enhanced error loggingxs
       if (axios.isAxiosError(error)) {
         console.error("Error deleting keuangan:", {
           message: error.message,

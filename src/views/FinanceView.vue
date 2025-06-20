@@ -181,7 +181,7 @@
                 @click="openEditModal(transaction)"
                 class="text-primary hover:text-primary-hover mr-3"
               >
-                Edit
+                 
               </button>
               <button 
                 @click="confirmDeleteTransaction(transaction)"
