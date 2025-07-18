@@ -73,13 +73,7 @@
             </svg>
             <span>Keuangan</span>
           </router-link>
-          <router-link to="/login" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 transition-colors duration-200 hover:bg-blue-50 hover:text-blue-700" 
-            :class="{ 'bg-blue-50 text-blue-700 border-r-4 border-blue-500': route.path === '/LOGOUT' }">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M3 3a1 1 0 000 2h10a1 1 0 100-2H3zm0 4a1 1 0 000 2h10a1 1 0 100-2H3zm0 4a1 1 0 100 2h10a1 1 0 100-2H3z" clip-rule="evenodd" />
-            </svg>
-            <span >Logout</span>
-          </router-link>
+          <ButtonLogout class="mt-4"/>
         </nav>
       </div>
     </aside>
@@ -109,6 +103,7 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '@/store/auth.store';
+import ButtonLogout from '@/components/ui/ButtonLogout.vue';
 import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
