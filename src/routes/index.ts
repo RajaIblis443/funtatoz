@@ -1,10 +1,13 @@
+// src/routes/index.ts
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 import DashboardView from "../views/DashboardView.vue";
+import { getAuthCookie } from "../utils/util";
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('../components/AppLayout.vue'),
+    meta: { requiresAuth: true }, // Semua child routes memerlukan auth
     children: [
       {
         path: '',
@@ -60,5 +63,27 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 })
+
+// Route Guard - Proteksi untuk route yang memerlukan login
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!getAuthCookie(); // Cek apakah user sudah login
+  
+  // Jika route memerlukan auth dan user belum login
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    console.log('🔒 Akses ditolak - belum login');
+    next('/login'); // Redirect ke halaman login
+    return;
+  }
+  
+  // Jika user sudah login tapi mengakses halaman login
+  if (to.name === 'Login' && isAuthenticated) {
+    console.log('✅ Sudah login - redirect ke dashboard');
+    next('/'); // Redirect ke dashboard
+    return;
+  }
+  
+  // Lanjutkan ke route yang dituju
+  next();
+});
 
 export default router
