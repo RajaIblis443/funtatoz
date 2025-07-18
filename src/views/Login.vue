@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="login-card">
       <div class="login-header">
-        <h1 class="text-xl font-bold text-center text-primary">Funtatoz</h1>
+        <h1 class="text-xl font-bold text-center text-primary">Batik Giriloyo</h1>
         <p class="text-sm text-center text-gray-600">Silahkan login untuk masuk ke dashboard</p>
       </div>
       
